@@ -5,21 +5,18 @@ class DiscountManager:
         self.discounts = {}
 
     def apply_discount_to_isbn(self, isbn, discount):
-        try:
-            comic = self.shop.get_comics_by_isbn(isbn)[0]  # Использование ISBN для идентификации комикса
+        comic = self.shop.get_comics_by_isbn(isbn)[0]
+        if comic:
             comic.price = round(comic.price * (1 - discount / 100), 2)
             print(f"Цена комикса '{comic.title}' со скидкой {discount}% теперь составляет {comic.price}.")
-        except ComicNotFoundError as e:
-            print(e)
-    
+        else:
+            raise ComicNotFoundError(f"Комикс с ISBN {isbn} не найден.")
+
     def define_discount(self, isbn, percent):
         if not (0 <= percent <= 100):
             raise InvalidDiscountError("Ошибка: скидка задана некорректно.")
-        try:
-            self.apply_discount_to_isbn(isbn, percent)
-            self.discounts[isbn] = percent
-        except ComicNotFoundError as e:
-            print(e)
+        self.apply_discount_to_isbn(isbn, percent)
+        self.discounts[isbn] = percent
 
     def display_discounts(self):
             if not self.discounts:  # Проверка пуст ли словарь скидок

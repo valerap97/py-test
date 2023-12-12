@@ -1,8 +1,10 @@
+
 import unittest
+import io
+from contextlib import redirect_stdout, redirect_stderr
 import os
 import sys
-import io
-
+import pytest
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, root_path)
 from main import ComicBook, ComicShop, DiscountManager
@@ -39,19 +41,17 @@ class TestComicShopIntegration(unittest.TestCase):
             self.discount_manager.define_discount("88888", 150)  # Превышение 100%
 
     def test_display_no_discounts(self):
-        # Предполагается, что в DiscountManager нет скидок,
-        # можно очистить словарь для уверенности.
         self.discount_manager.discounts = {}
-        with unittest.mock.patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+        with io.StringIO() as buf, redirect_stdout(buf):
             self.discount_manager.display_discounts()
-            self.assertEqual(mock_stdout.getvalue().strip(), "Скидок нет!")
+            self.assertEqual(buf.getvalue(), "Скидок нет!\n")
 
     def test_display_discounts(self):
-        # Прежде чем проверить вывод, необходимо обеспечить, что скидки уже определены.
         self.discount_manager.define_discount("88888", 10)
-        with unittest.mock.patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+        with io.StringIO() as buf, redirect_stdout(buf):
             self.discount_manager.display_discounts()
-            self.assertIn("Комикс 'Spider-Man': 10% скидка.", mock_stdout.getvalue().strip())
+            self.assertIn("Комикс 'Spider-Man': 10% скидка.", buf.getvalue())
+
 
 # запустить тесты
 if __name__ == '__main__':
