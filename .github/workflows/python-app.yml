@@ -36,7 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest and coverage
       run: |
-        pytest --cov=comic_inventory --cov=discount_manager.py  --cov=test_comic_shop.py --cov=test_comic_shop_acceptance.py --cov=test_discount_manager.py--cov=test_matrix_operations
+        pytest --cov=comic_inventory --cov=discount_manager  --cov=test_comic_shop --cov=test_comic_shop_acceptance --cov=test_discount_manager --cov=test_matrix_operations
     - name: Report coverage to Coveralls
       run: |
         coveralls
