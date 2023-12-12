@@ -38,9 +38,8 @@ jobs:
       run: |
         pytest --cov=comic_inventory --cov=discount_manager.py  --cov=test_comic_shop.py --cov=test_comic_shop_acceptance.py --cov=test_discount_manager.py--cov=test_matrix_operations
     - name: Report coverage to Coveralls
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         coveralls
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN}}
